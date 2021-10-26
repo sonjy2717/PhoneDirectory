@@ -1,5 +1,6 @@
 package project1.ver06;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class PhoneBookManager implements SubMenuItem {
@@ -27,19 +28,31 @@ public class PhoneBookManager implements SubMenuItem {
 	}
 	
 	// 입력
-	public void dataInput() {
+	public void dataInput() throws MenuSelectException {
 		
 		Scanner scanner = new Scanner(System.in);
 		
 		String name;
 		String phone;
+		int choice = 0;
 		
 		System.out.println("데이터 입력을 시작합니다.");
 		
-		System.out.println("1.일반, 2.동창, 3.회사");
-		System.out.print("선택>> ");
-		int choice = scanner.nextInt();
-		scanner.nextLine();
+		try {
+			System.out.println("1.일반, 2.동창, 3.회사");
+			System.out.print("선택>> ");
+			choice = scanner.nextInt();
+			scanner.nextLine();
+		}
+		catch (InputMismatchException e) {
+			System.out.println("제발... 좀...");
+			return;
+		}
+		
+		if (choice < 1 || choice > 3) {
+			MenuSelectException ex = new MenuSelectException();
+			throw ex;
+		}
 		
 		switch (choice) {
 		case BASIC:
@@ -51,17 +64,24 @@ public class PhoneBookManager implements SubMenuItem {
 			piArr[index++] = new PhoneInfo(name, phone);
 			break;
 		case SCHOOL:
-			System.out.print("이름 : ");
-			name = scanner.nextLine();
-			System.out.print("전화번호 : ");
-			phone = scanner.nextLine();
-			System.out.print("전공 : ");
-			String subject = scanner.nextLine();
-			System.out.print("학년 : ");
-			int grade = scanner.nextInt();
-			
-			piArr[index++] = new PhoneSchoolInfo(name, phone, subject, grade);
-			break;
+			try {
+				System.out.print("이름 : ");
+				name = scanner.nextLine();
+				System.out.print("전화번호 : ");
+				phone = scanner.nextLine();
+				System.out.print("전공 : ");
+				String subject = scanner.nextLine();
+				System.out.print("학년 : ");
+				int grade = scanner.nextInt();
+				
+				piArr[index++] = new PhoneSchoolInfo(name, phone, subject, grade);
+				break;
+			}
+			catch (InputMismatchException e) {
+				scanner.nextLine();
+				System.out.println("잘못 입력!");
+				return;
+			}
 		case COMPANY:
 			System.out.print("이름 : ");
 			name = scanner.nextLine();

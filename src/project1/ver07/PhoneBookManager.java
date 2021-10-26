@@ -1,45 +1,58 @@
 package project1.ver07;
 
+import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class PhoneBookManager implements SubMenuItem {
 	
-	PhoneInfo[] piArr;
-	int index;
+	HashSet<PhoneInfo> list;
 	
 	// 생성자
 	public PhoneBookManager() {
-		piArr = new PhoneInfo[100];
-		index = 0;
+		list = new HashSet<PhoneInfo>();
 	}
 	
 	// 메뉴 출력
 	public void printMenu() {
 		
-		for (int i = 0; i < index; i++) {
-			piArr[i].showPhoneInfo();
+		for (PhoneInfo pi : list) {
+			pi.showPhoneInfo();
 			System.out.println();
 		}
 		
-		if (index == 0) {
+		if (list.size() == 0) {
 			System.out.println("저장된 주소록이 없습니다.");
 		}
 	}
 	
 	// 입력
-	public void dataInput() {
+	public void dataInput() throws MenuSelectException {
 		
 		Scanner scanner = new Scanner(System.in);
 		
-		String name;
-		String phone;
+		String name = "";
+		String phone = "";
+		int choice = 0;
+		String check = "";
 		
 		System.out.println("데이터 입력을 시작합니다.");
 		
-		System.out.println("1.일반, 2.동창, 3.회사");
-		System.out.print("선택>> ");
-		int choice = scanner.nextInt();
-		scanner.nextLine();
+		try {
+			System.out.println("1.일반, 2.동창, 3.회사");
+			System.out.print("선택>> ");
+			choice = scanner.nextInt();
+			scanner.nextLine();
+		}
+		catch (InputMismatchException e) {
+			System.out.println("제발... 좀...");
+			return;
+		}
+		
+		if (choice < 1 || choice > 3) {
+			MenuSelectException ex = new MenuSelectException();
+			throw ex;
+		}
 		
 		switch (choice) {
 		case BASIC:
@@ -48,20 +61,27 @@ public class PhoneBookManager implements SubMenuItem {
 			System.out.print("전화번호 : ");
 			phone = scanner.nextLine();
 			
-			piArr[index++] = new PhoneInfo(name, phone);
+			list.add(new PhoneInfo(name, phone));
 			break;
 		case SCHOOL:
-			System.out.print("이름 : ");
-			name = scanner.nextLine();
-			System.out.print("전화번호 : ");
-			phone = scanner.nextLine();
-			System.out.print("전공 : ");
-			String subject = scanner.nextLine();
-			System.out.print("학년 : ");
-			int grade = scanner.nextInt();
-			
-			piArr[index++] = new PhoneSchoolInfo(name, phone, subject, grade);
-			break;
+			try {
+				System.out.print("이름 : ");
+				name = scanner.nextLine();
+				System.out.print("전화번호 : ");
+				phone = scanner.nextLine();
+				System.out.print("전공 : ");
+				String subject = scanner.nextLine();
+				System.out.print("학년 : ");
+				int grade = scanner.nextInt();
+				
+				list.add(new PhoneSchoolInfo(name, phone, subject, grade));
+				break;
+			}
+			catch (InputMismatchException e) {
+				scanner.nextLine();
+				System.out.println("잘못 입력!");
+				return;
+			}
 		case COMPANY:
 			System.out.print("이름 : ");
 			name = scanner.nextLine();
@@ -70,8 +90,22 @@ public class PhoneBookManager implements SubMenuItem {
 			System.out.print("회사 : ");
 			String companyName = scanner.nextLine();
 			
-			piArr[index++] = new PhoneCompanyInfo(name, phone, companyName);
+			list.add(new PhoneCompanyInfo(name, phone, companyName));
 			break;
+		}
+		
+		for (PhoneInfo pi : list) {
+			if (pi.name.equals(name)) {
+				System.out.println("이미 저장된 데이터 입니다.");
+				System.out.print("덮어쓸까요? Y(y) / N(n) >> ");
+				check = scanner.nextLine();
+			}
+			if ("y".equalsIgnoreCase(check)) {
+				
+			}
+			else if ("n".equalsIgnoreCase(check)) {
+				
+			}
 		}
 		
 		System.out.println("데이터 입력 완료");
@@ -86,9 +120,9 @@ public class PhoneBookManager implements SubMenuItem {
 		String search = scanner.nextLine();
 		boolean flag = true;
 		
-		for (int i = 0; i < index; i++) {
-			if (search.equals(piArr[i].name)) {
-				piArr[i].showPhoneInfo();
+		for (PhoneInfo pi : list) {
+			if (pi.name.equals(search)) {
+				pi.showPhoneInfo();
 				flag = false;
 			}
 		}
@@ -105,25 +139,21 @@ public class PhoneBookManager implements SubMenuItem {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("이름 : ");
 		String search = scanner.nextLine();
-		int delIndex = -1;
+		boolean delete = true;
 		
-		for (int i = 0; i < index; i++) {
-			if (search.equals(piArr[i].name)) {
-				piArr[i] = null;
-				delIndex = i;
-				index--;
+		for (PhoneInfo pi : list) {
+			if (pi.name.equals(search)) {
+				list.remove(pi);
+				delete = false;
 				break;
 			}
 		}
 		
-		if (delIndex == -1) {
+		if (delete) {
 			System.out.println("삭제할 데이터가 없습니다.");
 		}
 		else {
-			for (int i = delIndex; i < index; i++) {
-				piArr[i] = piArr[i + 1];
-			}
-			System.out.println("데이터 삭제가 완료되었습니다.");
+			System.out.println("삭제 완료");
 		}
 	}
 }

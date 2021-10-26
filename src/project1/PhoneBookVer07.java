@@ -44,8 +44,14 @@ public class PhoneBookVer07 implements MenuItem {
 			
 			switch (choice) {
 			case DATA_INPUT:
-				pbMgr.dataInput();
-				break;
+				try {
+					pbMgr.dataInput();
+					break;
+				}
+				catch (MenuSelectException e) {
+					System.out.println(e.getMessage());
+					break;
+				}
 			case DATA_SEARCH:
 				pbMgr.dataSearch();
 				break;
