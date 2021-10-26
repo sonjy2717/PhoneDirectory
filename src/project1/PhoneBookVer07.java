@@ -3,11 +3,11 @@ package project1;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import project1.ver06.MenuItem;
-import project1.ver06.MenuSelectException;
-import project1.ver06.PhoneBookManager;
+import project1.ver07.MenuItem;
+import project1.ver07.MenuSelectException;
+import project1.ver07.PhoneBookManager;
 
-public class PhoneBookVer06 implements MenuItem {
+public class PhoneBookVer07 implements MenuItem {
 	
 	public static void main(String[] args) {
 		
