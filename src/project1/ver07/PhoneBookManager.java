@@ -34,7 +34,6 @@ public class PhoneBookManager implements SubMenuItem {
 		String name = "";
 		String phone = "";
 		int choice = 0;
-		String check = "";
 		
 		System.out.println("데이터 입력을 시작합니다.");
 		
@@ -92,20 +91,6 @@ public class PhoneBookManager implements SubMenuItem {
 			
 			list.add(new PhoneCompanyInfo(name, phone, companyName));
 			break;
-		}
-		
-		for (PhoneInfo pi : list) {
-			if (pi.name.equals(name)) {
-				System.out.println("이미 저장된 데이터 입니다.");
-				System.out.print("덮어쓸까요? Y(y) / N(n) >> ");
-				check = scanner.nextLine();
-			}
-			if ("y".equalsIgnoreCase(check)) {
-				
-			}
-			else if ("n".equalsIgnoreCase(check)) {
-				
-			}
 		}
 		
 		System.out.println("데이터 입력 완료");
