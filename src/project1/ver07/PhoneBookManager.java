@@ -93,6 +93,14 @@ public class PhoneBookManager implements SubMenuItem {
 			break;
 		}
 		
+		for (PhoneInfo pi : list) {
+			for (int i = 0; i < list.size() - 1; i++) {
+				if (pi.name.equals(name)) {
+					System.out.println("중복");
+				}
+			}
+		}
+		
 		System.out.println("데이터 입력 완료");
 	}
 	
