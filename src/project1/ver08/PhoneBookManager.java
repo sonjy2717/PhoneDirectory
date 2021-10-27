@@ -1,4 +1,4 @@
-package project1.ver07;
+package project1.ver08;
 
 import java.util.HashSet;
 import java.util.InputMismatchException;
@@ -31,6 +31,7 @@ public class PhoneBookManager {
 			System.out.println();
 		}
 		
+		// 저장된 객체가 하나도 없을 때
 		if (list.size() == 0) {
 			System.out.println("저장된 주소록이 없습니다.");
 		}
@@ -58,6 +59,7 @@ public class PhoneBookManager {
 			return;
 		}
 		
+		// 정해진 숫자가 아닌 다른 숫자를 넣었을 때
 		if (choice < 1 || choice > 3) {
 			MenuSelectException ex = new MenuSelectException();
 			throw ex;

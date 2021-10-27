@@ -3,11 +3,11 @@ package project1;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import project1.ver07.MenuItem;
-import project1.ver07.MenuSelectException;
-import project1.ver07.PhoneBookManager;
+import project1.ver08.MenuItem;
+import project1.ver08.MenuSelectException;
+import project1.ver08.PhoneBookManager;
 
-public class PhoneBookVer07 {
+public class PhoneBookVer08 {
 	
 	public static void main(String[] args) {
 		
@@ -24,7 +24,6 @@ public class PhoneBookVer07 {
 				inputMenu(choice);
 			}
 			catch (InputMismatchException e) {
-				scanner.nextLine();
 				System.out.println("제발... 좀...");
 			}
 			catch (MenuSelectException e) {
@@ -44,6 +43,7 @@ public class PhoneBookVer07 {
 					break;
 				}
 				catch (MenuSelectException e) {
+					scanner.nextLine();
 					System.out.println(e.getMessage());
 					break;
 				}
@@ -65,6 +65,7 @@ public class PhoneBookVer07 {
 		scanner.close();
 	}
 	
+	// 사용자 지정 예외
 	public static int inputMenu(int choice) throws MenuSelectException {
 		
 		if (choice < 1 || choice > 5) {
