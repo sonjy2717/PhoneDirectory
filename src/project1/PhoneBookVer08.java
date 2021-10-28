@@ -3,6 +3,7 @@ package project1;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import project1.ver08.AutoSaver;
 import project1.ver08.MenuItem;
 import project1.ver08.MenuSelectException;
 import project1.ver08.PhoneBookManager;
@@ -13,6 +14,7 @@ public class PhoneBookVer08 {
 		
 		Scanner scanner = new Scanner(System.in);
 		PhoneBookManager pbMgr = new PhoneBookManager();
+		AutoSaver as = new AutoSaver(pbMgr);
 		
 		while (true) {
 			
@@ -21,9 +23,10 @@ public class PhoneBookVer08 {
 			try {
 				pbMgr.printMenu();
 	 			choice = scanner.nextInt();
-				inputMenu(choice);
+				pbMgr.inputMenu(choice);
 			}
 			catch (InputMismatchException e) {
+				scanner.nextLine();
 				System.out.println("제발... 좀...");
 			}
 			catch (MenuSelectException e) {
@@ -34,7 +37,11 @@ public class PhoneBookVer08 {
 				e.printStackTrace();
 			}
 			
-			if (choice == MenuItem.END_PROGRAM) break;
+			if (choice == MenuItem.END_PROGRAM) {
+				// 프로그램 종료시 입력됐던 정보 저장
+				pbMgr.savePhoneBook();
+				break;
+			}
 			
 			switch (choice) {
 			case MenuItem.DATA_INPUT:
@@ -56,6 +63,15 @@ public class PhoneBookVer08 {
 			case MenuItem.DATA_ALL_SHOW:
 				pbMgr.dataAllShow();
 				break;
+			case MenuItem.SAVE_OPTION:
+				if (!as.isAlive()) {
+					as = new AutoSaver(pbMgr);
+					pbMgr.saveOption(as);
+				}
+				else {
+					pbMgr.saveOption(as);
+				}
+				break;
 			}
 			
 			System.out.println();
@@ -65,14 +81,4 @@ public class PhoneBookVer08 {
 		scanner.close();
 	}
 	
-	// 사용자 지정 예외
-	public static int inputMenu(int choice) throws MenuSelectException {
-		
-		if (choice < 1 || choice > 5) {
-			MenuSelectException ex = new MenuSelectException();
-			throw ex;
-		}
-		
-		return choice;
-	}
 }

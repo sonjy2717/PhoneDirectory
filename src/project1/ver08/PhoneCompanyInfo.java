@@ -14,4 +14,10 @@ public class PhoneCompanyInfo extends PhoneInfo {
 		super.showPhoneInfo();
 		System.out.println("회사명 : " + companyName);
 	}
+	
+	@Override
+	public String toString() {
+		return "이름 : " + name + "\n전화번호 : " + phoneNumber 
+				+ "\n회사명 : " + companyName + "\n";
+	}
 }

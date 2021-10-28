@@ -1,5 +1,13 @@
 package project1.ver08;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -11,6 +19,7 @@ public class PhoneBookManager {
 	// 생성자
 	public PhoneBookManager() {
 		list = new HashSet<PhoneInfo>();
+		roadPhoneBook();
 	}
 	
 	// 메뉴 출력
@@ -19,7 +28,8 @@ public class PhoneBookManager {
 		System.out.println("2.데이터 검색");
 		System.out.println("3.데이터 삭제");
 		System.out.println("4.주소록 출력");
-		System.out.println("5.프로그램 종료");
+		System.out.println("5.저장 옵션");
+		System.out.println("6.프로그램 종료");
 		System.out.print("선택 : ");
 	}
 	
@@ -60,7 +70,7 @@ public class PhoneBookManager {
 		}
 		
 		// 정해진 숫자가 아닌 다른 숫자를 넣었을 때
-		if (choice < 1 || choice > 3) {
+		if (choice < SubMenuItem.BASIC || choice > SubMenuItem.COMPANY) {
 			MenuSelectException ex = new MenuSelectException();
 			throw ex;
 		}
@@ -99,6 +109,7 @@ public class PhoneBookManager {
 			break;
 		}
 		
+		// HashSet에 객체 추가 성공 여부
 		if (list.add(pi)) {
 			System.out.println("데이터 입력 완료");
 		}
@@ -164,6 +175,127 @@ public class PhoneBookManager {
 		}
 		else {
 			System.out.println("삭제 완료");
+		}
+	}
+	
+	// 사용자 지정 예외
+	public int inputMenu(int choice) throws MenuSelectException {
+		
+		if (choice < MenuItem.DATA_INPUT || choice > MenuItem.END_PROGRAM) {
+			MenuSelectException ex = new MenuSelectException();
+			throw ex;
+		}
+		
+		return choice;
+	}
+	
+	// 저장
+	public void savePhoneBook() {
+		try {
+			ObjectOutputStream out = 
+					new ObjectOutputStream(
+							new FileOutputStream(
+									"src/project1/ver08/PhoneBook.obj"));
+			
+			for (PhoneInfo pi : list) {
+				out.writeObject(pi);
+			}
+			out.close();
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("파일 없음!");
+		}
+		catch (IOException e) {}
+		catch (Exception e) {
+			System.out.println("아 몰랑 무슨 예외인지");
+			e.printStackTrace();
+		}
+		System.out.println("저장 완료!");
+	}
+	
+	// 로드
+	public void roadPhoneBook() {
+		try {
+			ObjectInputStream in = 
+					new ObjectInputStream(
+							new FileInputStream(
+									"src/project1/ver08/PhoneBook.obj"));
+			
+			while (true) {
+				PhoneInfo pi = (PhoneInfo)in.readObject();
+				list.add(pi);
+				if (pi == null) break;
+			}
+			in.close();
+		}
+		catch (ClassNotFoundException e) {
+			System.out.println("클래스 없음!");
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("파일 없음!");
+		}
+		catch (IOException e) {}
+		catch (Exception e) {
+			System.out.println("더 이상 읽을 정보가 없습니다.");
+		}
+		System.out.println("로드 완료!");
+	}
+	
+	// 저장 옵션
+	public void saveOption(AutoSaver as) {
+		Scanner scanner = new Scanner(System.in);
+		int choice = 0;
+		
+		try {
+			System.out.println("\n저장 옵션 선택");
+			System.out.println("1.자동 저장 ON");
+			System.out.println("2.자동 저장 OFF");
+			System.out.print("선택 : ");
+			choice = scanner.nextInt();
+		}
+		catch (InputMismatchException e) {
+			System.out.println("제발... 좀...");
+			return;
+		}
+		
+		if (choice == 1) {
+			if (as.isAlive()) {
+				System.out.println("이미 자동 저장이 실행중입니다.");
+			}
+			else {
+				as.setDaemon(true);
+				as.start();
+				System.out.println("자동 저장 ON");
+			}
+		}
+		else if (choice == 2) {
+			as.interrupt();
+			System.out.println("자동 저장 OFF");
+		}
+		else {
+			System.out.println("입력좀 제발 잘 해줘..");
+			return;
+		}
+	}
+	
+	public void saveTextInfo() {
+		System.out.println("\n자동 저장중...");
+		
+		try {
+			PrintWriter out = new PrintWriter(
+					new FileWriter("src/project1/ver08/PhoneBook.txt"));
+			
+			
+			for (PhoneInfo pi : list) {
+				out.println(pi.toString());
+			}
+			out.close();
+		}
+		catch (IOException e) {
+			System.out.println("입출력 예외 발생..");
+		}
+		catch (Exception e) {
+			System.out.println("아 몰랑 무슨 예외야 이건");
 		}
 	}
 }
