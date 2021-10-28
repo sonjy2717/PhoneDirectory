@@ -10,19 +10,18 @@ public class PhoneInfo implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(name);
+		return name.hashCode();
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		PhoneInfo pi = (PhoneInfo)obj;
+		if (pi.name.equals(this.name)) {
 			return true;
 		}
-		if (!(obj instanceof PhoneInfo)) {
+		else {
 			return false;
 		}
-		PhoneInfo other = (PhoneInfo) obj;
-		return Objects.equals(name, other.name);
 	}
 	
 	public PhoneInfo(String name, String phoneNumber) {

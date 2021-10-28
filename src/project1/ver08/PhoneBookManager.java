@@ -35,7 +35,6 @@ public class PhoneBookManager {
 	
 	// 주소록 출력
 	public void dataAllShow() {
-		
 		for (PhoneInfo pi : list) {
 			pi.showPhoneInfo();
 			System.out.println();
