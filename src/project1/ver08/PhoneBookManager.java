@@ -24,12 +24,14 @@ public class PhoneBookManager {
 	
 	// 메뉴 출력
 	public void printMenu() {
-		System.out.println("1.데이터 입력");
-		System.out.println("2.데이터 검색");
-		System.out.println("3.데이터 삭제");
+		System.out.println("=================================");
+		System.out.print("1.데이터 입력\t");
 		System.out.println("4.주소록 출력");
+		System.out.print("2.데이터 검색\t");
 		System.out.println("5.저장 옵션");
+		System.out.print("3.데이터 삭제\t");
 		System.out.println("6.프로그램 종료");
+		System.out.println("=================================");
 		System.out.print("선택 : ");
 	}
 	
@@ -55,10 +57,12 @@ public class PhoneBookManager {
 		String phone = "";
 		int choice = 0;
 		
-		System.out.println("데이터 입력을 시작합니다.");
+		System.out.println("=================================");
+		System.out.println("데이터 입력을 시작합니다");
 		
 		try {
 			System.out.println("1.일반, 2.동창, 3.회사");
+			System.out.println("=================================");
 			System.out.print("선택>> ");
 			choice = scanner.nextInt();
 			scanner.nextLine();
