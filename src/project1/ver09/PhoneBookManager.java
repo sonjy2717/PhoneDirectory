@@ -182,6 +182,9 @@ public class PhoneBookManager {
 			if (con != null) {
 				System.out.println("DB 연결 성공");
 			}
+			else {
+				System.out.println("DB 연결 실패");
+			}
 		}
 		catch (ClassNotFoundException e) {
 			System.out.println("오라클 드라이버 로딩 실패");
