@@ -178,7 +178,10 @@ public class PhoneBookManager {
 			Class.forName("oracle.jdbc.OracleDriver");
 			con = DriverManager.getConnection(
 					"jdbc:oracle:thin://@localhost:1521:xe", "kosmo", "1234");
-			System.out.println("DB 연결 성공");
+			
+			if (con != null) {
+				System.out.println("DB 연결 성공");
+			}
 		}
 		catch (ClassNotFoundException e) {
 			System.out.println("오라클 드라이버 로딩 실패");
