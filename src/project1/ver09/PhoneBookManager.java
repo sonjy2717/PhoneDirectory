@@ -74,7 +74,6 @@ public class PhoneBookManager {
 		finally {
 			close();
 		}
-		System.out.println("자바 데이터 입력 완료");
 	}
 	
 	// 검색
@@ -88,7 +87,6 @@ public class PhoneBookManager {
 			Scanner scanner = new Scanner(System.in);
 			System.out.print("이름 : ");
 			String search = scanner.nextLine();
-			boolean flag = true;
 			
 			String query = "SELECT idx, name, phone_number, "
 					+ " to_char(birthday, 'yyyy-mm-dd') FROM "
@@ -103,17 +101,6 @@ public class PhoneBookManager {
 				String date = rs.getString(4);
 				
 				System.out.printf("%d %s %s %s\n",idx, name, phone, date);
-			}
-			
-			for (int i = 0; i < index; i++) {
-				if (search.equals(piArr[i].name)) {
-					piArr[i].showPhoneInfo();
-					flag = false;
-				}
-			}
-			
-			if (flag) {
-				System.out.println("자바 검색 결과가 없습니다.");
 			}
 		}
 		catch (Exception e) {
@@ -138,31 +125,11 @@ public class PhoneBookManager {
 			Scanner scanner = new Scanner(System.in);
 			System.out.print("이름 : ");
 			String search = scanner.nextLine();
-			int delIndex = -1;
 			
 			ps.setString(1, search);
 			
 			int data = ps.executeUpdate();
 			System.out.println(data + "행 DB 삭제완료");
-			
-			for (int i = 0; i < index; i++) {
-				if (search.equals(piArr[i].name)) {
-					piArr[i] = null;
-					delIndex = i;
-					index--;
-					break;
-				}
-			}
-			
-			if (delIndex == -1) {
-				System.out.println("삭제할 자바 데이터가 없습니다.");
-			}
-			else {
-				for (int i = delIndex; i < index; i++) {
-					piArr[i] = piArr[i + 1];
-				}
-				System.out.println("자바 데이터 삭제가 완료되었습니다.");
-			}
 		}
 		catch (Exception e) {
 			System.out.println("알 수 없는 예외발생");
